@@ -8,6 +8,7 @@ using System.Web;
 using System.IO;
 using System.Drawing;
 using ConvertJsonToPDF.Models;
+using ConvertJsonToPDF.Tools;
 
 namespace ConvertJsonToPDF.JSONtoPDF
 {
@@ -84,7 +85,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         /// <summary>
         /// メイン処理(引数あり)
         /// </summary>
-        public void PrintTextToPDF(Product[] products)
+        public byte[] PrintTextToPDF(Product[] products)
         {
             //テンプレートとなるファイル（最終的にここは最初から組み込んだほうがいいかも
             PrintDocument doc = GetDocumentSettings();
@@ -103,6 +104,8 @@ namespace ConvertJsonToPDF.JSONtoPDF
             doc.PrintPage += new PrintPageEventHandler(pd_PrintPage);
             doc.Print();
 
+            LogUtil.Info("PDF" + curPageNumber.ToString() + "ページ作成");
+
             //↑↑↑↑↑　2024/04/19　↑↑↑↑↑
             //通常のファイル出力できるもの(System.IO.FileStream)なら、MemoryStreamを使うことでメモリ上に疑似的にファイル作成することが可能。
             //つまり、この.Print()の処理のうち、ファイル出力部分が弄るor設定変更できれば、やらうとしていたことが実現可能！？
@@ -114,6 +117,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
             //これでバイトにできてるっぽいが、できてる場合中身どうなってる？実データ以外の情報は？これだけでPDFが作り直せるのか？
             //できれば、1回PDF出力をしないでバイナリデータに変換したい
             byte[] bs = System.IO.File.ReadAllBytes(doc.PrinterSettings.PrintFileName);
+            return bs;
 
             ////検証はこのやり方で良い？→しかし、同じ環境下同プログラム内だったら、byte[]で情報が完結してなかったとしても気づかないのでは…
             //var docPath = @"D:\source\実験\スタイルシート初作成\";

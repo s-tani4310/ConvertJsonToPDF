@@ -50,84 +50,22 @@ namespace ConvertJsonToPDF.Controllers
 
         //[HttpPost] 要引数指定
         //※[HttpPost](おそらくGetとか他のも）は、1箇所しか書けない。これを見てアクセスしているため。
-        //POST: api/Products
-        //To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         #region
-
-        //[HttpPost]
-        //public async Task PostProduct(JsonObject product)
-        //{
-        //    //PDF作成処理取ってきた。但し非同期対応できてない
-        //    ConvertJSONtoPDF JSONtoPDF = new ConvertJSONtoPDF();
-        //    JSONtoPDF.ConvertToPDF();
-
-        //    //以下、サンプルにあった分
-
-        //    //_context.Product.Add(product);
-        //    //この中でDB接続エラーが出てる。でも、今回別にDB接続するわけではないので解決する必要ない？
-        //    //本処理でまだawaitにできてないのでとりあえず作成しているだけ。
-        //    await _context.SaveChangesAsync();
-
-        //    //ここにPDF作成処理つくればいける？
-        //    //戻り値ありの場合、Task<Result>に変えればOK
-        //}
-
-
-
-
-
-
-
-        ////これは動いた（引数はあるけどデータは独自に作る）
-        //[HttpPost]
-        //public async Task PostProduct(Product product)
-        //{
-        //    //PDF作成処理取ってきた。但し非同期対応できてない
-        //    ConvertJSONtoPDF JSONtoPDF = new ConvertJSONtoPDF();
-        //    //JSONtoPDF.ConvertToPDF();
-
-        //    //引数の値のPDFを作成してみる(とりあえす1レコード。複数の場合どうすればよいかは考えないといけない）
-        //    JSONtoPDF.ConvertToPDF(product);
-
-        //    //以下、サンプルにあった分
-
-        //    //_context.Product.Add(product);
-        //    //この中でDB接続エラーが出てる。でも、今回別にDB接続するわけではないので解決する必要ない？
-        //    //本処理でまだawaitにできてないのでとりあえず作成しているだけ。
-        //    await _context.SaveChangesAsync();
-
-        //    //ここにPDF作成処理つくればいける？
-        //    //戻り値ありの場合、Task<Result>に変えればOK
-        //}
-
         //Inをフォーマットの決まっているJSON型データの配列指定に固定。
         //もし送信時点でのフォーマットを自由にできて受信後に変換可能か判断したければ
         //取込の型をobjectにすれば一旦取込は可能（その場合どのデータが何に該当するかは判断処理を書かないといけない）
         [HttpPost]
-        public async Task PostProduct(Product[] products)
+        public async Task<IActionResult> PostProduct(Product[] products)
         {
-            //PDF作成処理取ってきた。但し非同期対応できてない
+            //PDF作成処理取ってきた。但し非同期対応できてないので、データ量が大量になる場合は一部改良が必要になる。
             ConvertJSONtoPDF JSONtoPDF = new ConvertJSONtoPDF();
-            //JSONtoPDF.ConvertToPDF();
 
-            //引数の値のPDFを作成してみる(とりあえす1レコード。複数の場合どうすればよいかは考えないといけない）
-            JSONtoPDF.ConvertToPDF(products);
+            //引数の情報を元に、PDFをバイナリデータで取得
+            byte[] bs = JSONtoPDF.ConvertToPDF(products);
 
-            //byte[] bs = JSONtoPDF.ConvertToPDF(products);
-
-
-            //以下、サンプルにあった分
-
-
-            //_context.Product.Add(product);
-
-            //この中でDB接続エラーが出てる。でも、今回別にDB接続するわけではないので解決する必要ない？
-            //本処理でまだawaitにできてないのでとりあえず作成しているだけ。
-            await _context.SaveChangesAsync();
-
-            //ここにPDF作成処理つくればいける？
-            //戻り値ありの場合、Task<Result>に変えればOK
-            //return this.File(bs, "application/octet-stream");
+            // content-type:PDFドキュメントデータ
+            //exeみたいにダウンロード式にする場合は、「application/octet-stream」に変更する
+            return this.File(bs, "application/pdf");
         }
         #endregion
 

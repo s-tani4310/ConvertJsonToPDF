@@ -250,3 +250,8 @@ D:\source\ConvertJsonToPDF\ConvertJsonToPDF\obj\Release\net8.0\refint\ConvertJso
 D:\source\ConvertJsonToPDF\ConvertJsonToPDF\obj\Release\net8.0\ConvertJsonToPDF.pdb
 D:\source\ConvertJsonToPDF\ConvertJsonToPDF\obj\Release\net8.0\ConvertJsonToPDF.genruntimeconfig.cache
 D:\source\ConvertJsonToPDF\ConvertJsonToPDF\obj\Release\net8.0\ref\ConvertJsonToPDF.dll
+D:\source\ConvertJsonToPDF\ConvertJsonToPDF\bin\Release\net8.0\nlog.config
+D:\source\ConvertJsonToPDF\ConvertJsonToPDF\bin\Release\net8.0\NLog.dll
+D:\source\ConvertJsonToPDF\ConvertJsonToPDF\bin\Release\net8.0\NLog.Extensions.Logging.dll
+D:\source\ConvertJsonToPDF\ConvertJsonToPDF\bin\Release\net8.0\NLog.Web.AspNetCore.dll
+D:\source\ConvertJsonToPDF\ConvertJsonToPDF\obj\Release\net8.0\ConvertJsonToPDF.sourcelink.json

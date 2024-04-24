@@ -13,6 +13,9 @@ using System.Windows.Markup;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Drawing.Drawing2D;
+using NLog;
+using ConvertJsonToPDF.Tools;
+using System.Security.AccessControl;
 
 namespace ConvertJsonToPDF.JSONtoPDF
 {
@@ -21,6 +24,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
         public void ConvertToPDF()
         {
+
             //Webアプリケーションでは、Console.WriteLineは出力する場所がないので使えません！！
 
             // このコード例は、HTML ファイルを読み取る方法を示しています
@@ -40,13 +44,21 @@ namespace ConvertJsonToPDF.JSONtoPDF
             pdf.PrintTextToPDF();
 
         }
-        public void ConvertToPDF(Product[] products)
+        public byte[] ConvertToPDF(Product[] products)
         {
+            LogUtil.Info("▼▼▼処理開始▼▼▼");
+            try
+            {
+                //★Windows10以降でプリインストールされているPrintToPDFを利用し、PDFを作成する
+                var pdf = new PrintPDF_OnamaeSeal();
+                var result = pdf.PrintTextToPDF(products);
+                return result;
 
-            //★Windows10以降でプリインストールされているPrintToPDFを利用し、PDFを作成する
-            var pdf = new PrintPDF_OnamaeSeal();
-            pdf.PrintTextToPDF(products);
-
+            }
+            finally 
+            {
+                LogUtil.Info("▲▲▲処理終了▲▲▲");
+            }
         }
 
         //テスト用サンプルデータ作成処理(GetJsonSampleList)
@@ -159,14 +171,33 @@ namespace ConvertJsonToPDF.JSONtoPDF
         {
             var result = new Dictionary<int, JsonObject>();
             var cnt = 1;
-            //取り込む際は配列なので、各データに「何件目のデータか」を持たせる為Dictionaryに切替
-            foreach (Product product in products)
+            try
             {
-                result.Add(cnt, ConvertJsonData(product));
-                cnt++;
-            }
+                //取り込む際は配列なので、各データに「何件目のデータか」を持たせる為Dictionaryに切替
+                foreach (Product product in products)
+                {
+                    result.Add(cnt, ConvertJsonData(product));
+                    cnt++;
+                }
 
-            return result;
+                //最後+1してるので、データ件数はcnt-1
+                foreach (var item in result)
+                {
+                    JsonObject data = item.Value;
+                    LogUtil.Info("　受注ID：" + data.受注ID );
+                    LogUtil.Info("　店舗名：" + data.店舗名);
+                    LogUtil.Info("　購入日時：" + data.購入日時);
+                    LogUtil.Info("　取込日時：" + data.取込日時);
+                }
+                LogUtil.Info((cnt - 1).ToString() + "件のデータ取込");
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error("ConvertJsonListでエラー：" + ex.ToString());
+                return result;
+            }
         }
         //外部データを印刷用Dictionaryに変換(とりあえず1データ)
         public JsonObject ConvertJsonData(Product product)
