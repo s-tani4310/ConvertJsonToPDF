@@ -1,0 +1,6 @@
+@ConvertJsonToPDF_HostAddress = http://localhost:5083
+
+GET {{ConvertJsonToPDF_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
