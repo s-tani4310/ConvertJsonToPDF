@@ -22,27 +22,23 @@ namespace ConvertJsonToPDF.JSONtoPDF
     public class ConvertJSONtoPDF
     {
 
-        public void ConvertToPDF()
+        public byte[] ConvertToPDF()
         {
 
-            //Webアプリケーションでは、Console.WriteLineは出力する場所がないので使えません！！
+            LogUtil.Debug("★これはテストデータです★");
+            LogUtil.Info("▼▼▼処理開始▼▼▼");
+            try
+            {
+                //★Windows10以降でプリインストールされているPrintToPDFを利用し、PDFを作成する
+                var pdf = new PrintPDF_OnamaeSeal();
+                var result = pdf.PrintTextToPDF();
+                return result;
 
-            // このコード例は、HTML ファイルを読み取る方法を示しています
-            // ドキュメントを保存するための出力パスを準備する
-            //string documentPath = @"D:\source\実験\スタイルシート初作成\baseHTML_NameSeal.html";
-
-            //テスト用サンプルデータ作成処理
-            //Todo:最終的にこれは外部からのデータ取込になる
-            //List<JsonObject> jsonList = GetJsonSampleList();
-
-            //JSONの各データを順次読み込んで、この処理をすることで各所にデータを割り当てる（割り当て処理は何度も通るので別メソッドにしている
-
-
-
-            //★Windows10以降でプリインストールされているPrintToPDFを利用し、PDFを作成する
-            var pdf = new PrintPDF_OnamaeSeal();
-            pdf.PrintTextToPDF();
-
+            }
+            finally
+            {
+                LogUtil.Info("▲▲▲処理終了▲▲▲");
+            }
         }
         public byte[] ConvertToPDF(Product[] products)
         {

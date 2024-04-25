@@ -10,9 +10,13 @@ using ConvertJsonToPDF.Models;
 using Humanizer;
 using ConvertJsonToPDF.JSONtoPDF;
 using Newtonsoft.Json.Linq;
+using ConvertJsonToPDF.Tools;
 
 namespace ConvertJsonToPDF.Controllers
 {
+    //テスト用。個の記述だと「～test/Products」「～api/Products」両方接続できる
+    //[Route("test/[controller]")]
+
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -30,19 +34,32 @@ namespace ConvertJsonToPDF.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
         {
-            return await _context.Product.ToListAsync();
+            Console.WriteLine("うごいた");
+
+            LogUtil.Info("◆引数なしGET◆");
+            //return this.File(bs, "application/pdf");
+
+            ConvertJSONtoPDF JSONtoPDF = new ConvertJSONtoPDF();
+            //引数を使わず、PG内でサンプルデータを作成して印刷
+            byte[] bs = JSONtoPDF.ConvertToPDF();
+
+            // content-type:PDFドキュメントデータ
+            //exeみたいにダウンロード式にする場合は、「application/octet-stream」に変更する
+            return this.File(bs, "application/pdf");
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
+            LogUtil.Info("◆引数なしGETid指定◆");
             var product = await _context.Product.FindAsync(id);
 
             if (product == null)
             {
                 return NotFound();
             }
+
 
             return product;
         }

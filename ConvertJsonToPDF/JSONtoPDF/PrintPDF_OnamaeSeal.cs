@@ -39,7 +39,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         /// <summary>
         /// メイン処理
         /// </summary>
-        public void PrintTextToPDF()
+        public byte[] PrintTextToPDF()
         {
             //テンプレートとなるファイル（最終的にここは最初から組み込んだほうがいいかも
             PrintDocument doc = GetDocumentSettings();
@@ -66,19 +66,21 @@ namespace ConvertJsonToPDF.JSONtoPDF
             //できれば、1回PDF出力をしないでバイナリデータに変換したい
             byte[] bs = System.IO.File.ReadAllBytes(doc.PrinterSettings.PrintFileName);
 
-            //検証はこのやり方で良い？→しかし、同じ環境下同プログラム内だったら、byte[]で情報が完結してなかったとしても気づかないのでは…
-            var docPath = @"D:\source\実験\スタイルシート初作成\";
-            var PrintFileName = Path.Combine(docPath, DateTime.Now.ToString("yyyyMMddHHmmss") + "再構築" + ".pdf");
-            System.IO.FileStream fs = new FileStream(PrintFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            return bs;
 
-            fs.Write(bs, 0, bs.Length);
+            ////検証はこのやり方で良い？→しかし、同じ環境下同プログラム内だったら、byte[]で情報が完結してなかったとしても気づかないのでは…
+            //var docPath = @"D:\source\実験\スタイルシート初作成\";
+            //var PrintFileName = Path.Combine(docPath, DateTime.Now.ToString("yyyyMMddHHmmss") + "再構築" + ".pdf");
+            //System.IO.FileStream fs = new FileStream(PrintFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
 
-            //メモリへの読み書きなので、こっちなら態々実ファイルを作る必要はない
-            using (MemoryStream ms = new MemoryStream())
-            {
-                //byte[]全部書き込み
-                ms.Write(bs, 0, bs.Length);
-            }
+            //fs.Write(bs, 0, bs.Length);
+
+            ////メモリへの読み書きなので、こっちなら態々実ファイルを作る必要はない
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    //byte[]全部書き込み
+            //    ms.Write(bs, 0, bs.Length);
+            //}
 
         }
 
