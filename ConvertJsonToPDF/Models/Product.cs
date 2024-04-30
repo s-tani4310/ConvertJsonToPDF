@@ -16,9 +16,9 @@ namespace ConvertJsonToPDF.Models
         [JsonProperty("取込日時")] public string 取込日時 { get; set; }
         [JsonProperty("請求金額")] public string 請求金額 { get; set; }
         [JsonProperty("グループ")] public string グループ { get; set; }
-        [JsonProperty("シール番号")] public string シール番号 { get; set; }
-        [JsonProperty("説明書")] public string 説明書 { get; set; }
-        [JsonProperty("その他")] public string その他 { get; set; }
+        [JsonProperty("シール番号")] public string[] シール番号 { get; set; }
+        [JsonProperty("説明書")] public string[] 説明書 { get; set; }
+        [JsonProperty("その他")] public string[] その他 { get; set; }
         [JsonProperty("宅配業者名")] public string 宅配業者名 { get; set; }
         [JsonProperty("お届け予定(指定)日")] public string お届け予定日 { get; set; }
         [JsonProperty("配達時間帯")] public string 配達時間帯 { get; set; }

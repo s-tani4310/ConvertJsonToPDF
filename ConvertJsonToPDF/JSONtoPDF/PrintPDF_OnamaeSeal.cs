@@ -36,6 +36,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         private string stringToPrint = "";
         private bool isNewPage = true;
 
+
         /// <summary>
         /// メイン処理
         /// </summary>
@@ -65,6 +66,10 @@ namespace ConvertJsonToPDF.JSONtoPDF
             //これでバイトにできてるっぽいが、できてる場合中身どうなってる？実データ以外の情報は？これだけでPDFが作り直せるのか？
             //できれば、1回PDF出力をしないでバイナリデータに変換したい
             byte[] bs = System.IO.File.ReadAllBytes(doc.PrinterSettings.PrintFileName);
+
+
+            //バイナリに変換してしまえば元のファイルは不要
+            File.Delete(doc.PrinterSettings.PrintFileName);
 
             return bs;
 
@@ -119,6 +124,11 @@ namespace ConvertJsonToPDF.JSONtoPDF
             //これでバイトにできてるっぽいが、できてる場合中身どうなってる？実データ以外の情報は？これだけでPDFが作り直せるのか？
             //できれば、1回PDF出力をしないでバイナリデータに変換したい
             byte[] bs = System.IO.File.ReadAllBytes(doc.PrinterSettings.PrintFileName);
+
+
+            //バイナリに変換してしまえば元のファイルは不要
+            //File.Delete(doc.PrinterSettings.PrintFileName);
+
             return bs;
 
             ////検証はこのやり方で良い？→しかし、同じ環境下同プログラム内だったら、byte[]で情報が完結してなかったとしても気づかないのでは…
@@ -145,6 +155,23 @@ namespace ConvertJsonToPDF.JSONtoPDF
         private PrintDocument GetDocumentSettings()
         {
             string docPath = @"D:\source\実験\スタイルシート初作成";
+            string baseFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_";
+            string fullPath = Path.Combine(baseFileName + ".pdf");   //仮
+
+            //流石に1秒以内で50以上の同時出力はない想定。
+            for (int i = 1; i<=50; i++)
+            {
+                fullPath = Path.Combine(docPath, baseFileName + i.ToString() + ".pdf");
+                if (File.Exists(fullPath))
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             PrintDocument doc = new PrintDocument()
             {
                 PrinterSettings = new PrinterSettings()
@@ -160,7 +187,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
                     },
                     //出力先をfileに指定する
                     PrintToFile = true,
-                    PrintFileName = Path.Combine(docPath, DateTime.Now.ToString("yyyyMMddHHmmss") + "変換後" + ".pdf"),
+                    PrintFileName = fullPath,
                 }
             };
 

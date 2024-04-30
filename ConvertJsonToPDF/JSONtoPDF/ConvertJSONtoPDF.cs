@@ -16,6 +16,7 @@ using System.Drawing.Drawing2D;
 using NLog;
 using ConvertJsonToPDF.Tools;
 using System.Security.AccessControl;
+using NuGet.Protocol;
 
 namespace ConvertJsonToPDF.JSONtoPDF
 {
@@ -67,7 +68,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         public Dictionary<int, JsonObject> GetJsonSampleList()
         {
             var result = new Dictionary<int,JsonObject>();
-            for (int i = 1;i <= 100; i++)
+            for (int i = 1;i <= 10; i++)
             {
                 if (i % 2 == 1)
                 {
@@ -206,9 +207,13 @@ namespace ConvertJsonToPDF.JSONtoPDF
             data.取込日時 = data.取込日時;
             //data.請求金額 = data.請求金額;
             data.グループ = product.グループ;
-            data.シール番号 = product.シール番号;
-            data.説明書 = product.説明書;
-            data.その他 = product.その他;
+            //data.シール番号 = product.シール番号;
+            //data.説明書 = product.説明書;
+            //data.その他 = product.その他;
+            data.シール番号 = string.Join('・', product.シール番号);
+            data.説明書 = string.Join('・', product.説明書);
+            data.その他 = string.Join('・', product.その他);
+
             data.宅配業者名 = product.宅配業者名;
             data.お届け予定日 = product.お届け予定日;
             data.配達時間帯 = product.配達時間帯;
