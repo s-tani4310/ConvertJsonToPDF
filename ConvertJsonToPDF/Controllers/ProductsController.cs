@@ -11,6 +11,8 @@ using Humanizer;
 using ConvertJsonToPDF.JSONtoPDF;
 using Newtonsoft.Json.Linq;
 using ConvertJsonToPDF.Tools;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace ConvertJsonToPDF.Controllers
 {
@@ -71,6 +73,23 @@ namespace ConvertJsonToPDF.Controllers
         //Inをフォーマットの決まっているJSON型データの配列指定に固定。
         //もし送信時点でのフォーマットを自由にできて受信後に変換可能か判断したければ
         //取込の型をobjectにすれば一旦取込は可能（その場合どのデータが何に該当するかは判断処理を書かないといけない）
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> PostProduct(RequestJson products)
+        //{
+        //    //PDF作成処理取ってきた。但し非同期対応できてないので、データ量が大量になる場合は一部改良が必要になる。
+        //    ConvertJSONtoPDF JSONtoPDF = new ConvertJSONtoPDF();
+
+        //    //引数の情報を元に、PDFをバイナリデータで取得
+        //    byte[] bs = JSONtoPDF.ConvertToPDF(products.data);
+
+        //    // content-type:PDFドキュメントデータ
+        //    //exeみたいにダウンロード式にする場合は、「application/octet-stream」に変更する
+        //    return this.File(bs, "application/pdf");
+        //}
+
+        //配列で渡されるVer
         [HttpPost]
         public async Task<IActionResult> PostProduct(Product[] products)
         {
@@ -84,6 +103,7 @@ namespace ConvertJsonToPDF.Controllers
             //exeみたいにダウンロード式にする場合は、「application/octet-stream」に変更する
             return this.File(bs, "application/pdf");
         }
+
         #endregion
 
         //[HttpPut] 要属性に対する引数指定

@@ -27,6 +27,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         {
 
             LogUtil.Debug("★これはテストデータです★");
+            LogUtil.Debug("★コンソール出力時の環境依存文字の表示テスト：髙★");
             LogUtil.Info("▼▼▼処理開始▼▼▼");
             try
             {
@@ -92,28 +93,28 @@ namespace ConvertJsonToPDF.JSONtoPDF
             switch (id)
             {
                 case "1":
-                    data.受注ID = "664-1978";
-                    data.店舗名 = "楽天 ホビナビ";
-                    data.購入日時 = "2024/3/19  0:24:26";
-                    data.取込日時 = "2024/4/03";
+                    data.OrderID = "664-1978";
+                    data.ShopName = "楽天 ホビナビ";
+                    data.OrderDate = "2024/3/19  0:24:26";
+                    data.InputDate = "2024/4/03";
                     //data.取込日時 = "2024/4/03  10:02:26";
                     //data.請求金額 = "1000";
-                    data.グループ = "04/03";
-                    data.シール番号 = "C2";
-                    data.説明書 = "MB107・MB151";
-                    data.その他 = "";
-                    data.宅配業者名 = "ネコポス(速達)事務所用";
-                    data.お届け予定日 = "";
-                    data.配達時間帯 = "";
-                    data.送付先氏名 = "落合　良子";
-                    data.送付先郵便番号 = "496-0905";
-                    data.送付先住所 = "愛知県愛西市北一色町北田面284-3";
-                    data.送付先電話番号 = "090-999-9999";
+                    data.GroupCd = "04/03";
+                    data.SealNo = "C2";
+                    data.Guide = "MB107・MB151";
+                    data.Other = "";
+                    data.DeliverySupplier = "ネコポス(速達)事務所用";
+                    data.DeliveryDate = "";
+                    data.DeliveryTime = "";
+                    data.CustomerName = "落合　良子";
+                    data.CustomerPost = "496-0905";
+                    data.CustomerAddress = "愛知県愛西市北一色町北田面284-3";
+                    data.CustomerTel = "090-999-9999";
                     //data.記載事項 = "";
                     //data.特記事項 = "";
-                    data.受注備考 = "受注備考に書かれる";
-                    data.顧客備考 = "顧客備考に書かれる";
-                    data.出荷予定日 = "2024/3/26  10:33:26";
+                    data.OrderBiko = "受注備考に書かれる";
+                    data.CustomerBiko = "顧客備考に書かれる";
+                    data.ShippingDate = "2024/3/26  10:33:26";
 
                     //Inがただの配列なので、これは取り込む時に加工したほうがいい
                     data.bikoList = new List<MeisaiData>
@@ -129,27 +130,27 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
                     break;
                 case "2":
-                    data.受注ID = "664-1980";
-                    data.店舗名 = "楽天 ホビナビ";
-                    data.購入日時 = "2024/03/19 00:31:29";
-                    data.取込日時 = "2024/4/03  10:02:26";
+                    data.OrderID = "664-1980";
+                    data.ShopName = "楽天 ホビナビ";
+                    data.OrderDate = "2024/03/19 00:31:29";
+                    data.InputDate = "2024/4/03  10:02:26";
                     //data.請求金額 = "1000";
-                    data.グループ = "04/03";
-                    data.シール番号 = "B5";
-                    data.説明書 = "MB107・MB151";
-                    data.その他 = "";
-                    data.宅配業者名 = "ネコポス(速達)事務所用";
-                    data.お届け予定日 = "";
-                    data.配達時間帯 = "";
-                    data.送付先氏名 = "平尾 美希";
-                    data.送付先郵便番号 = "668-0824";
-                    data.送付先住所 = "兵庫県豊岡市森尾931-14";
-                    data.送付先電話番号 = "090-7752-8054";
+                    data.GroupCd = "04/03";
+                    data.SealNo = "B5";
+                    data.Guide = "MB107・MB151";
+                    data.Other = "";
+                    data.DeliverySupplier = "ネコポス(速達)事務所用";
+                    data.DeliveryDate = "";
+                    data.DeliveryTime = "";
+                    data.CustomerName = "平尾 美希";
+                    data.CustomerPost = "668-0824";
+                    data.CustomerAddress = "兵庫県豊岡市森尾931-14";
+                    data.CustomerTel = "090-7752-8054";
                     //data.記載事項 = "";
                     //data.特記事項 = "";
-                    data.受注備考 = "";
-                    data.顧客備考 = "";
-                    data.出荷予定日 = "2024/03/26 10:33:41";
+                    data.OrderBiko = "";
+                    data.CustomerBiko = "";
+                    data.ShippingDate = "2024/03/26 10:33:41";
 
                     data.bikoList = new List<MeisaiData>
                     {
@@ -173,6 +174,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
                 //取り込む際は配列なので、各データに「何件目のデータか」を持たせる為Dictionaryに切替
                 foreach (Product product in products)
                 {
+                    //髙
                     result.Add(cnt, ConvertJsonData(product));
                     cnt++;
                 }
@@ -181,10 +183,8 @@ namespace ConvertJsonToPDF.JSONtoPDF
                 foreach (var item in result)
                 {
                     JsonObject data = item.Value;
-                    LogUtil.Info("　受注ID：" + data.受注ID );
-                    LogUtil.Info("　店舗名：" + data.店舗名);
-                    LogUtil.Info("　購入日時：" + data.購入日時);
-                    LogUtil.Info("　取込日時：" + data.取込日時);
+                    LogUtil.Info("　受注ID：" + data.OrderID );
+                    LogUtil.Info("　顧客名：" + data.CustomerName);
                 }
                 LogUtil.Info((cnt - 1).ToString() + "件のデータ取込");
 
@@ -201,31 +201,31 @@ namespace ConvertJsonToPDF.JSONtoPDF
         {
             var data = new JsonObject();
 
-            data.受注ID = product.受注ID;
-            data.店舗名 = product.店舗名;
-            data.購入日時 = product.購入日時;
-            data.取込日時 = data.取込日時;
+            data.OrderID = product.受注ID;
+            data.ShopName = product.店舗名;
+            data.OrderDate = product.購入日時;
+            data.InputDate = data.InputDate;
             //data.請求金額 = data.請求金額;
-            data.グループ = product.グループ;
+            data.GroupCd = product.グループ;
             //data.シール番号 = product.シール番号;
             //data.説明書 = product.説明書;
             //data.その他 = product.その他;
-            data.シール番号 = string.Join('・', product.シール番号);
-            data.説明書 = string.Join('・', product.説明書);
-            data.その他 = string.Join('・', product.その他);
+            data.SealNo = string.Join('・', product.シール番号);
+            data.Guide = string.Join('・', product.説明書);
+            data.Other = string.Join('・', product.その他);
 
-            data.宅配業者名 = product.宅配業者名;
-            data.お届け予定日 = product.お届け予定日;
-            data.配達時間帯 = product.配達時間帯;
-            data.送付先氏名 = product.送付先氏名;
-            data.送付先郵便番号 = product.送付先郵便番号;
-            data.送付先住所 = product.送付先住所;
-            data.送付先電話番号 = product.送付先電話番号;
+            data.DeliverySupplier = product.宅配業者名;
+            data.DeliveryDate = product.お届け予定日;
+            data.DeliveryTime = product.配達時間帯;
+            data.CustomerName = product.送付先氏名;
+            data.CustomerPost = product.送付先郵便番号;
+            data.CustomerAddress = "〒"+ product.送付先住所;
+            data.CustomerTel = product.送付先電話番号;
             //data.記載事項 = //product.記載事項;
             //data.特記事項 = //product.特記事項;
-            data.受注備考 = product.受注備考;
-            data.顧客備考 = product.顧客備考;
-            data.出荷予定日 = product.出荷予定日;
+            data.OrderBiko = product.受注備考;
+            data.CustomerBiko = product.顧客備考;
+            data.ShippingDate = product.出荷予定日;
 
             data.bikoList = new List<MeisaiData>();
             if (product?.bikos?.Count > 0)

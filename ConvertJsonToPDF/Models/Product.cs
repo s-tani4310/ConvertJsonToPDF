@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 
 namespace ConvertJsonToPDF.Models
 {
@@ -20,7 +21,9 @@ namespace ConvertJsonToPDF.Models
         [JsonProperty("説明書")] public string[] 説明書 { get; set; }
         [JsonProperty("その他")] public string[] その他 { get; set; }
         [JsonProperty("宅配業者名")] public string 宅配業者名 { get; set; }
+
         [JsonProperty("お届け予定(指定)日")] public string お届け予定日 { get; set; }
+
         [JsonProperty("配達時間帯")] public string 配達時間帯 { get; set; }
         [JsonProperty("送付先氏名")] public string 送付先氏名 { get; set; }
         [JsonProperty("送付先郵便番号")] public string 送付先郵便番号 { get; set; }

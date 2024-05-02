@@ -234,7 +234,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
             //★★★★★★総ページ数取得の為、改ページが必要な伝票数は先に把握しないといけないのでは！？
             //どうせ3データ超えたら改行するのであれば、3行超えたデータは2ページとして扱えばいい（3枚行くことあるなら別途考える
-            var cnt = OrderDataCollection.Count + OrderDataCollection.Count(x => x.Value.bikoList.Count() >= 3);
+            var cnt = OrderDataCollection.Count + OrderDataCollection.Count(x => x.Value.IsPageOver);
             CreateText(sender
                      , e
                      , curPageNumber.ToString(GetCountToZeroFormat()) + " / " + cnt.ToString() + "ページ"
@@ -274,7 +274,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
             //★★★★★★総ページ数取得の為、改ページが必要な伝票数は先に把握しないといけないのでは！？
             //どうせ3データ超えたら改行するのであれば、3行超えたデータは2ページとして扱えばいい（3枚行くことあるなら別途考える
-            var cnt = OrderDataCollection.Count + OrderDataCollection.Count(x => x.Value.bikoList.Count() >= 3);
+            var cnt = OrderDataCollection.Count + OrderDataCollection.Count(x => x.Value.IsPageOver);
             CreateText(sender
                      , e
                      , curPageNumber.ToString(GetCountToZeroFormat()) + " / " + cnt.ToString() + "ページ"
@@ -284,7 +284,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
             //ヘッダここまで////////////////////////////////////////////////////////////////////////////////////////////
 
             //データ取得…は、実際受注IDと明細部分さえ取れればいい
-            var orderId = OrderDataCollection[curDataNumber].受注ID;
+            var orderId = OrderDataCollection[curDataNumber].OrderID;
             //最初のページに印字できなかったデータ
             List<MeisaiData> bikoList = OrderDataCollection[curDataNumber].bikoList.Where(x => !x.isPrintFirstPage).ToList();
 
@@ -314,7 +314,6 @@ namespace ConvertJsonToPDF.JSONtoPDF
                 rowCount++;
                 CreateTextMeisaiRow(sender, e, rowCount, bikos.Meisai, bikos.ItemCount,200);
             }
-
 
             //外枠の縦幅は、データの数によって動的にしないといけないのでここで設定する
             //160：目次の手前のy座標
@@ -354,7 +353,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
             yData.CoordinateStart = 110;
             yData.CoordinateEnd = yData.CoordinateStart + 30;
 
-            CreateText(sender, e, jData.店舗名, PrintToPDF_Common.GetCoordinate(20, 200, yData), textType.header1);
+            CreateText(sender, e, jData.ShopName, PrintToPDF_Common.GetCoordinate(20, 500, yData), textType.header1);
 
             //枠内開始位置
             yData.CoordinateStart = 180;
@@ -369,64 +368,64 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
             CreateText(sender, e, "■受注管理情報", PrintToPDF_Common.GetCoordinate(30, 200, yData), textType.header1);
             CreateText(sender, e, "受注ID：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.受注ID, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
+            CreateText(sender, e, jData.OrderID, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
             CreateText(sender, e, "購入日時：", PrintToPDF_Common.GetCoordinate(500, 600, yData), textType.header2);
-            CreateText(sender, e, jData.購入日時, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
+            CreateText(sender, e, jData.OrderDate, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData2Col1, xData2Col2);
 
             yData = GetCoordinateData(yData, 1.5);
             CreateText(sender, e, "■配送情報", PrintToPDF_Common.GetCoordinate(30, 200, yData), textType.header1);
             CreateText(sender, e, "配送業者：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.宅配業者名, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
+            CreateText(sender, e, jData.DeliverySupplier, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
             CreateText(sender, e, "出荷予定日：", PrintToPDF_Common.GetCoordinate(500, 600, yData), textType.header2);
-            CreateText(sender, e, jData.出荷予定日, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
+            CreateText(sender, e, jData.ShippingDate, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData2Col1, xData2Col2);
 
             yData = GetCoordinateData(yData, 0.5);
             //■配送情報
             CreateText(sender, e, "配送指定日：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.お届け予定日, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
+            CreateText(sender, e, jData.DeliveryDate, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
             CreateText(sender, e, "配達時間帯：", PrintToPDF_Common.GetCoordinate(500, 600, yData), textType.header2);
-            CreateText(sender, e, jData.配達時間帯, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
+            CreateText(sender, e, jData.DeliveryTime, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData2Col1, xData2Col2);
 
             yData = GetCoordinateData(yData, 1.5);
 
             CreateText(sender, e, "■送付先", PrintToPDF_Common.GetCoordinate(30, 200, yData), textType.header1);
             CreateText(sender, e, "氏名：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.送付先氏名, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
+            CreateText(sender, e, jData.CustomerName, PrintToPDF_Common.GetCoordinate(300, 500, yData), textType.data1);
             CreateText(sender, e, "TEL：", PrintToPDF_Common.GetCoordinate(500, 600, yData), textType.header2);
-            CreateText(sender, e, jData.送付先電話番号, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
+            CreateText(sender, e, jData.CustomerTel, PrintToPDF_Common.GetCoordinate(600, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData2Col1, xData2Col2);
 
             yData = GetCoordinateData(yData, 0.5);
             //■送付先
             CreateText(sender, e, "住所：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.送付先郵便番号 + " " + jData.送付先住所, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
+            CreateText(sender, e, jData.CustomerPost + " " + jData.CustomerAddress, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData1Col);
 
             yData = GetCoordinateData(yData, 1.5);
             CreateText(sender, e, "■梱包指示", PrintToPDF_Common.GetCoordinate(30, 200, yData), textType.header1);
             CreateText(sender, e, "グループ：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.グループ, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
+            CreateText(sender, e, jData.GroupCd, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData1Col);
 
             yData = GetCoordinateData(yData, 0.5);
             //■梱包指示
             CreateText(sender, e, "シール番号：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.シール番号, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
+            CreateText(sender, e, jData.SealNo, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData1Col);
 
             yData = GetCoordinateData(yData, 0.5);
             //■梱包指示
             CreateText(sender, e, "説明書：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.説明書, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
+            CreateText(sender, e, jData.Guide, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData1Col);
 
             yData = GetCoordinateData(yData, 0.5);
             //■梱包指示
             CreateText(sender, e, "その他：", PrintToPDF_Common.GetCoordinate(200, 300, yData), textType.header2);
-            CreateText(sender, e, jData.その他, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
+            CreateText(sender, e, jData.Other, PrintToPDF_Common.GetCoordinate(300, 800, yData), textType.data1);
             CreateRowLine(sender, e, yData.CoordinateEnd, xData1Col);
 
         }
@@ -445,9 +444,9 @@ namespace ConvertJsonToPDF.JSONtoPDF
             yData.CoordinateStart = 600;
             yData.CoordinateEnd = yData.CoordinateStart + 30;
             CreateText(sender, e, "受注備考", PrintToPDF_Common.GetCoordinate(30, 130, yData), textType.header2);
-            CreateText(sender, e, jData.受注備考, PrintToPDF_Common.GetCoordinate(130, 410, yData), textType.data1);
+            CreateText(sender, e, jData.OrderBiko, PrintToPDF_Common.GetCoordinate(130, 410, yData), textType.data1);
             CreateText(sender, e, "顧客備考", PrintToPDF_Common.GetCoordinate(420, 520, yData), textType.header2);
-            CreateText(sender, e, jData.顧客備考, PrintToPDF_Common.GetCoordinate(520, 800, yData), textType.data1);
+            CreateText(sender, e, jData.CustomerBiko, PrintToPDF_Common.GetCoordinate(520, 800, yData), textType.data1);
 
         }
 
@@ -459,7 +458,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
             //枠外店舗異名
             yData.CoordinateStart = 700;
             yData.CoordinateEnd = yData.CoordinateStart + 20;
-            CreateText(sender, e, "■明細  " + jData.受注ID, PrintToPDF_Common.GetCoordinate(20, 400, yData), textType.header2);
+            CreateText(sender, e, "■明細  " + jData.OrderID, PrintToPDF_Common.GetCoordinate(20, 400, yData), textType.header2);
 
             //ヘッダ(1行)
             yData.CoordinateStart = 720;
@@ -600,7 +599,8 @@ namespace ConvertJsonToPDF.JSONtoPDF
                     sf.Alignment = StringAlignment.Far;
                     break;
             }
-            Font font = new Font("MSゴシック", fontsize);
+            Font font = new Font("MSPゴシック", fontsize);
+            //Font font = new Font("MSゴシック", fontsize);
 
             e.Graphics.DrawString(txt, font, bush, coordinate, sf);
         }
