@@ -26,8 +26,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         public byte[] ConvertToPDF()
         {
 
-            LogUtil.Debug("★これはテストデータです★");
-            LogUtil.Debug("★コンソール出力時の環境依存文字の表示テスト：髙★");
+            LogUtil.Debug("★Debugモードでのみ出力されます。実運用版でこれが出る場合はReleaseでコンパイルしなおすこと！★");
             LogUtil.Info("▼▼▼処理開始▼▼▼");
             try
             {
@@ -162,7 +161,6 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
             return data;
         }
-
 
         //外部データを印刷用Dictionaryに変換(とりあえず1データ)
         public Dictionary<int, JsonObject> ConvertJsonList(Product[] products)

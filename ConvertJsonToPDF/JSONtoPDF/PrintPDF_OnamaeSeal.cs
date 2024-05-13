@@ -59,34 +59,13 @@ namespace ConvertJsonToPDF.JSONtoPDF
             doc.PrintPage += new PrintPageEventHandler(pd_PrintPage);
             doc.Print();
 
-            //↑↑↑↑↑　2024/04/19　↑↑↑↑↑
-            //通常のファイル出力できるもの(System.IO.FileStream)なら、MemoryStreamを使うことでメモリ上に疑似的にファイル作成することが可能。
-            //つまり、この.Print()の処理のうち、ファイル出力部分が弄るor設定変更できれば、やらうとしていたことが実現可能！？
-
-            //これでバイトにできてるっぽいが、できてる場合中身どうなってる？実データ以外の情報は？これだけでPDFが作り直せるのか？
-            //できれば、1回PDF出力をしないでバイナリデータに変換したい
+            //PDFをバイナリファイルに変換
             byte[] bs = System.IO.File.ReadAllBytes(doc.PrinterSettings.PrintFileName);
-
 
             //バイナリに変換してしまえば元のファイルは不要
             File.Delete(doc.PrinterSettings.PrintFileName);
 
             return bs;
-
-            ////検証はこのやり方で良い？→しかし、同じ環境下同プログラム内だったら、byte[]で情報が完結してなかったとしても気づかないのでは…
-            //var docPath = @"D:\source\実験\スタイルシート初作成\";
-            //var PrintFileName = Path.Combine(docPath, DateTime.Now.ToString("yyyyMMddHHmmss") + "再構築" + ".pdf");
-            //System.IO.FileStream fs = new FileStream(PrintFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
-
-            //fs.Write(bs, 0, bs.Length);
-
-            ////メモリへの読み書きなので、こっちなら態々実ファイルを作る必要はない
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    //byte[]全部書き込み
-            //    ms.Write(bs, 0, bs.Length);
-            //}
-
         }
 
         /// <summary>
@@ -113,37 +92,13 @@ namespace ConvertJsonToPDF.JSONtoPDF
 
             LogUtil.Info("PDF" + curPageNumber.ToString() + "ページ作成");
 
-            //↑↑↑↑↑　2024/04/19　↑↑↑↑↑
-            //通常のファイル出力できるもの(System.IO.FileStream)なら、MemoryStreamを使うことでメモリ上に疑似的にファイル作成することが可能。
-            //つまり、この.Print()の処理のうち、ファイル出力部分が弄るor設定変更できれば、やらうとしていたことが実現可能！？
-
-
-            //↓一旦ここは処理が重くなるのでコメントアウトする（最終的に復活させる
-
-
-            //これでバイトにできてるっぽいが、できてる場合中身どうなってる？実データ以外の情報は？これだけでPDFが作り直せるのか？
-            //できれば、1回PDF出力をしないでバイナリデータに変換したい
+            //PDFをバイナリファイルに変換
             byte[] bs = System.IO.File.ReadAllBytes(doc.PrinterSettings.PrintFileName);
 
-
             //バイナリに変換してしまえば元のファイルは不要
-            //File.Delete(doc.PrinterSettings.PrintFileName);
+            File.Delete(doc.PrinterSettings.PrintFileName);
 
             return bs;
-
-            ////検証はこのやり方で良い？→しかし、同じ環境下同プログラム内だったら、byte[]で情報が完結してなかったとしても気づかないのでは…
-            //var docPath = @"D:\source\実験\スタイルシート初作成\";
-            //var PrintFileName = Path.Combine(docPath, DateTime.Now.ToString("yyyyMMddHHmmss") + "再構築" + ".pdf");
-            //System.IO.FileStream fs = new FileStream(PrintFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write);
-
-            //fs.Write(bs, 0, bs.Length);
-
-            ////メモリへの読み書きなので、こっちなら態々実ファイルを作る必要はない
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    //byte[]全部書き込み
-            //    ms.Write(bs, 0, bs.Length);
-            //}
 
         }
 
@@ -695,14 +650,11 @@ namespace ConvertJsonToPDF.JSONtoPDF
         }
 
 
-
-
-
         private void pd_PrintPage_New(object sender, PrintPageEventArgs e)
         {
 
-            //(動作確認用)縦横のライン作成しておく
-            PrintToPDF_Common.CreateBaseLine(e);
+            ////(動作確認用)縦横のライン作成しておく
+            //PrintToPDF_Common.CreateBaseLine(e);
 
             //テキスト描画(JSONデータ取込もこの中で行われる）
             CreateText(sender, e);
