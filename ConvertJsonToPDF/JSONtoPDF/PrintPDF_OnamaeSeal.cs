@@ -110,7 +110,7 @@ namespace ConvertJsonToPDF.JSONtoPDF
         private PrintDocument GetDocumentSettings()
         {
             string docPath = @"D:\source\実験\スタイルシート初作成";
-            string baseFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_";
+            string baseFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + "_";
             string fullPath = Path.Combine(baseFileName + ".pdf");   //仮
 
             //流石に1秒以内で50以上の同時出力はない想定。
